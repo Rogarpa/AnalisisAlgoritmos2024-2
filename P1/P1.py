@@ -1,7 +1,11 @@
 import numpy as np
+import sys
+import random
+import math
 
 class Board:
     
+    block_counter = 1
     def __init__(self, n, special_square_i, special_square_j):
         if(n < 0):
             print("Board size minor than 0")
@@ -16,18 +20,12 @@ class Board:
         self.subsquares_stack = []
         self.subsquares_stack.append([ [(len(self.board) - 1, 0), (0, len(self.board) - 1)]
                                  , [special_square_i, special_square_j]])
-        self.block_counter = 2
         
         
     def solve_all(self):
         count = 0
         while(self.next_step()):
-            print("---------------------")
-            count += 1
-            print(count)
-            print("---------------------")
-
-            self.print()
+            continue
         
     def print(self):
         print(str(self.board))
@@ -92,8 +90,49 @@ class Board:
         self.block_counter += 1
         return
     def put_special_square(self, square_i, square_j):
-        self.board[square_i, square_j] = 1
+        self.board[square_i, square_j] = 0
         return
 
-b = Board(4, 0, 1)
-b.solve_all()
+class Interface:
+    def start(self):
+        if(len(sys.argv) < 2):
+            print("Insert the fixed size for solving the Blocking Problem")
+
+        board_size = 0
+        try:
+            board_size = self.validate_board_size(sys.argv[1])
+        except Exception as e: print(e)
+        
+        (special_square_i, special_square_j) = (random.randint(0,board_size-1),  random.randint(0,board_size-1))
+        board = Board(board_size, special_square_i, special_square_j)
+        print(f"""Solution of the board with size {board_size} and
+                    special unique square in (i,j) = ({special_square_i}, {special_square_i})
+                    with special 0 number"""
+            )
+        
+        count = 0
+        while(board.next_step()):
+            print("---------------------")
+            count += 1
+            print(count)
+            print("---------------------")
+            board.print()        
+
+        
+    def validate_board_size(self, size):
+        int_size = 0
+        
+        try:
+            int_size = int(size)
+        except:
+            raise Exception("Board size should be integer")
+        
+        if(int_size <= 0):
+            raise Exception("Board size should be positive")
+        if(((math.log2(int_size))%1) != 0):
+            raise Exception("Board size should be 2^n shape")
+        return int_size
+        
+
+interface = Interface()
+interface.start()
