@@ -101,7 +101,9 @@ class Interface:
         board_size = 0
         try:
             board_size = self.validate_board_size(sys.argv[1])
-        except Exception as e: print(e)
+        except Exception as e: 
+            print(e)
+            return 1
         
         (special_square_i, special_square_j) = (random.randint(0,board_size-1),  random.randint(0,board_size-1))
         board = Board(board_size, special_square_i, special_square_j)
