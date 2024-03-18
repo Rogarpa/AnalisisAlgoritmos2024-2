@@ -93,7 +93,7 @@ class Board:
         self.block_counter += 1
         return
     def put_special_square(self, square_i, square_j):
-        self.board[square_i, square_j] = 0
+        self.board[square_i, square_j] = -1
         return
 
 class Interface:
@@ -114,6 +114,7 @@ class Interface:
         root.title("Colored Frames")
         self.grid = Color_grid(root, board_size, board_size)
         self.grid.create_grid()
+        self.grid.draw_matrix(self.board.get_matrix_state())
         boton = tk.Button(text="Siguiente Paso", command=self.next_board_step)
         boton.place(x=0, y=0)
         root.mainloop()
@@ -138,7 +139,7 @@ class Interface:
         
 class Color_picker:
     def __init__(self, min_key, max_key):
-        self.color_width_space = 16777215 #8-bit rgb max value
+        self.color_width_space = 16777214 #8-bit rgb max value
         
         self.step=(self.color_width_space/(max_key - min_key))
         self.min_key = min_key
@@ -152,6 +153,8 @@ class Color_picker:
         return colors_array
 
     def pick_color(self, key):
+        if(key == -1):
+            return '#ffffff'
         decimal_color = (key - self.min_key) * self.step
         return '#'+ (str(hex(int(decimal_color))))[2:].zfill(6)
 
@@ -165,6 +168,7 @@ class Color_grid:
         self.squares = [None for i in range(self.width*self.length)]
     def create_grid(self):
         self.create_square()
+        self.color_picker = Color_picker(0, (((self.length * self.width) - 1) / 3))
     
     def create_square(self):
         for i in range(self.length):
@@ -172,12 +176,9 @@ class Color_grid:
                 self.squares[(i*self.length)+j] = tk.Frame(self.main_frame, width=self.square_size, height=self.square_size, bg='#000000')
                 self.squares[(i*self.length)+j].grid(row=i, column=j, padx=5, pady=5)
     def draw_matrix(self, matrix):
-        min = np.min(matrix)
-        max = np.max(matrix)
-        color_picker = Color_picker(min, max)
         for i in range(self.length):
             for j in range(self.width):
-                self.color_square(color_picker.pick_color(matrix[i,j]), i, j)
+                self.color_square(self.color_picker.pick_color(matrix[i,j]), i, j)
 
     def color_square(self, color, i , j):
         self.squares[(i*self.width) + j]["bg"] = color
