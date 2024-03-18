@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import random
 import math
+import tkinter as tk
 
 class Board:
     
@@ -33,6 +34,8 @@ class Board:
     
     def to_string(self):
         return str(self.board)
+    def get_matrix_state(self):
+        return self.board
     
     def next_step(self):
         if (self.subsquares_stack == []):
@@ -106,21 +109,15 @@ class Interface:
             return 1
         
         (special_square_i, special_square_j) = (random.randint(0,board_size-1),  random.randint(0,board_size-1))
-        board = Board(board_size, special_square_i, special_square_j)
-        print(f"""Solution of the board with size {board_size} and
-                    special unique square in (i,j) = ({special_square_i}, {special_square_i})
-                    with special 0 number"""
-            )
-        
-        count = 0
-        while(board.next_step()):
-            print("---------------------")
-            count += 1
-            print(count)
-            print("---------------------")
-            board.print()        
+        self.board = Board(board_size, special_square_i, special_square_j)
+        root = tk.Tk()
+        root.title("Colored Frames")
+        self.grid = Color_grid(root, board_size, board_size)
+        self.grid.create_grid()
+        boton = tk.Button(text="Siguiente Paso", command=self.next_board_step)
+        boton.place(x=0, y=0)
+        root.mainloop()
 
-        
     def validate_board_size(self, size):
         int_size = 0
         
@@ -135,6 +132,56 @@ class Interface:
             raise Exception("Board size should be 2^n shape")
         return int_size
         
+    def next_board_step(self):
+        self.board.next_step()
+        self.grid.draw_matrix(self.board.get_matrix_state())
+        
+class Color_picker:
+    def __init__(self, min_key, max_key):
+        self.color_width_space = 16777215 #8-bit rgb max value
+        
+        self.step=(self.color_width_space/(max_key - min_key))
+        self.min_key = min_key
+
+    def get_colors(self):
+        color = 0
+        colors_array = []
+        while(color <= self.color_width_space):
+            colors_array.append('#'+ (str(hex(int(color))))[2:].zfill(6)) 
+            color += self.step
+        return colors_array
+
+    def pick_color(self, key):
+        decimal_color = (key - self.min_key) * self.step
+        return '#'+ (str(hex(int(decimal_color))))[2:].zfill(6)
+
+class Color_grid:
+    def __init__(self, root, length, width):
+        self.square_size = 40
+        self.length = length
+        self.width = width
+        self.main_frame = tk.Frame(root)
+        self.main_frame.pack(padx=5, pady=5)
+        self.squares = [None for i in range(self.width*self.length)]
+    def create_grid(self):
+        self.create_square()
+    
+    def create_square(self):
+        for i in range(self.length):
+            for j in range(self.width):
+                self.squares[(i*self.length)+j] = tk.Frame(self.main_frame, width=self.square_size, height=self.square_size, bg='#000000')
+                self.squares[(i*self.length)+j].grid(row=i, column=j, padx=5, pady=5)
+    def draw_matrix(self, matrix):
+        min = np.min(matrix)
+        max = np.max(matrix)
+        color_picker = Color_picker(min, max)
+        for i in range(self.length):
+            for j in range(self.width):
+                self.color_square(color_picker.pick_color(matrix[i,j]), i, j)
+
+    def color_square(self, color, i , j):
+        self.squares[(i*self.width) + j]["bg"] = color
+
 
 interface = Interface()
 interface.start()
