@@ -1,3 +1,4 @@
+import numpy as np
 class SortingAlgorithms:
 
     def LocalInsertionSort(self, array):
@@ -56,9 +57,36 @@ class SortingAlgorithms:
             root.insert(element)
         return root.inorderTraversal(root)
 
-    def RadixLSDSort(self, array):
-        print(array)
+    def RadixLSDSort(self, array, digits_length):
+        digit_classes = []
+        digit_classes_number = 74
+        
+        # Create digit_classes
+        for i in range(digit_classes_number):
+            digit_classes.insert(i, [])
 
+        for element in array:
+            print(self.getSymbolIndex(element[0]))
+            digit_classes[self.getSymbolIndex(element[0])].append(element)
+            
+        # i = 1
+        # while(i < digits_length):
+        #     for digit_class in digit_classes:
+        #         for element in digit_class:
+        #             digit_classes[self.getSymbolIndex(element[i])].append(element)
+        #             print(element)
+        #     i += 1
+        
+        print(digit_classes)
+    def getSymbolIndex(self, symbol):
+        max_ascii_code = 122
+        min_ascii_code = 48
+
+        ascii_code = ord(symbol)
+        if((ascii_code < min_ascii_code) or (ascii_code > max_ascii_code)):
+            raise Exception("Only alphanumeric digits allowed", str(symbol))
+        return (ascii_code - min_ascii_code)
+        
 class bilinked_list_node:
     def __init__(self, data):
         self.data = data
@@ -129,12 +157,15 @@ class tree_node:
     
 sorting = SortingAlgorithms()
 array = [1,3,2,7,5,0]
-print(sorting.LocalInsertionSort(array))
+char_array = [
+    "ac",
+    "bb",
+    "ca"
+]
+# print(sorting.LocalInsertionSort(array))
 
-print(sorting.TreeSort(array))
-# sorting.RadixLSDSort(array)
-
-
+# print(sorting.TreeSort(array))
+sorting.RadixLSDSort(char_array, 2)
 
 
 # # Tree Sort testing
