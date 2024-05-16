@@ -1,9 +1,50 @@
 class SortingAlgorithms:
 
     def LocalInsertionSort(self, array):
+        if (not hasattr(array, '__len__')):
+            raise Exception("Input has no array behaviour")
+        if (len(array) <= 0):
+            return array
+        toInsertList = bilinked_list_node(array[0])
+        lastInsertedNode = toInsertList
+        for element in array[1:]:
+            
+            if(lastInsertedNode.data < element):
+                lastInsertedNode = self.insert_right(element, lastInsertedNode)
+            else:
+                lastInsertedNode = self.insert_left(element, lastInsertedNode)
         
-        return "LocalInsertionSort"
-
+        head = self.getHead(toInsertList)
+        return head.toArray(head)
+    def getHead(self, node):
+        head = node
+        while(head.before != None):
+            head = head.before
+        return head
+    def insert_left(self, data, node):
+        
+        if(node == None):
+            return None
+        left_node = node.before
+        
+        if(left_node == None):
+            return node.insert_before(data)
+        
+        if(data >= left_node.data):
+            return node.insert_before(data)
+            
+        
+        return self.insert_left(data, left_node)
+    def insert_right(self, data, node):
+        
+        if(node == None):
+            return None
+        right_node = node.next
+        if(right_node == None):
+            return node.insert_after(data)
+        if(data <= right_node.data):
+            return node.insert_after(data)
+        return self.insert_right(data, right_node)
     def TreeSort(self, array):
         if (not hasattr(array, '__len__')):
             raise Exception("Input has no array behaviour")
@@ -32,6 +73,7 @@ class bilinked_list_node:
             old_before.next = node
         node.before = old_before
         node.next = self
+        return node
 
     def insert_after(self, data):
         node = bilinked_list_node(data)
@@ -41,6 +83,7 @@ class bilinked_list_node:
             old_next.before = node
         node.before = self
         node.next = old_next
+        return node
     
     def toArray(self, node):
         resultArray = []
@@ -84,14 +127,20 @@ class tree_node:
         res = res + self.inorderTraversal(root.right)
         return res
     
-# sorting = SortingAlgorithms()
-# array = [3,2,1]
-# array = []
-# sorting.LocalInsertionSort(array)
-# print(sorting.TreeSort(array))
+sorting = SortingAlgorithms()
+array = [1,3,2,7,5,0]
+print(sorting.LocalInsertionSort(array))
+
+print(sorting.TreeSort(array))
 # sorting.RadixLSDSort(array)
-head = bilinked_list_node(1)
-head.insert_after(5)
-head.insert_after(4)
-head.insert_after(3)
-print(head.toArray(head))
+
+
+
+
+# # Tree Sort testing
+# # Bilinked list testing
+# head = bilinked_list_node(1)
+# first_node = head.insert_before(5)
+# head.insert_before(4)
+# head.insert_before(3)
+# print(first_node.toArray(first_node))
