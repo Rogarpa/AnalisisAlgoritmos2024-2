@@ -2,6 +2,10 @@ import numpy as np
 class SortingAlgorithms:
 
     def LocalInsertionSort(self, array):
+        print("====================")
+        print("====================")
+        print("====================")
+        print("LOCAL INSERTION SORT ALGORITHM")
         if (not hasattr(array, '__len__')):
             raise Exception("Input has no array behaviour")
         if (len(array) <= 0):
@@ -47,6 +51,10 @@ class SortingAlgorithms:
             return node.insert_after(data)
         return self.insert_right(data, right_node)
     def TreeSort(self, array):
+        print("====================")
+        print("====================")
+        print("====================")
+        print("TREE SORT ALGORITHM")
         if (not hasattr(array, '__len__')):
             raise Exception("Input has no array behaviour")
         if (len(array) <= 0):
@@ -55,37 +63,61 @@ class SortingAlgorithms:
         root = tree_node(array[0])
         for element in array[1:]:
             root.insert(element)
+            print("element insertion = ", element)
+            print(root.inorderTraversal(root), "\n")
         return root.inorderTraversal(root)
 
     def RadixLSDSort(self, array, digits_length):
+        print("====================")
+        print("====================")
+        print("====================")
+        print("RADIX LSD SORT ALGORITHM")
         digit_classes = []
-        digit_classes_number = 74
+        digit_classes_number = 35
         
         # Create digit_classes
-        for i in range(digit_classes_number):
+        for i in range(digit_classes_number+1):
             digit_classes.insert(i, [])
 
         for element in array:
-            print(self.getSymbolIndex(element[0]))
-            digit_classes[self.getSymbolIndex(element[0])].append(element)
-            
-        # i = 1
-        # while(i < digits_length):
-        #     for digit_class in digit_classes:
-        #         for element in digit_class:
-        #             digit_classes[self.getSymbolIndex(element[i])].append(element)
-        #             print(element)
-        #     i += 1
-        
+            digit_classes[self.getSymbolIndex(element[digits_length-1])].append(element)
+        print("iteration = 0")
+        print(digit_classes,"\n")
+
+        i = digits_length-2
+        while(i >= 0):
+            print("iteration = ", i-(digits_length-3),"\n")
+            print(digit_classes)
+            for digit_class in digit_classes:
+                if(digit_class == []):
+                    continue
+                class_elements_number = len(digit_class)
+                
+                while(class_elements_number > 0):
+                    element = digit_class.pop(0)
+                    class_elements_number -= 1
+                    class_index = self.getSymbolIndex(element[i])
+                    digit_classes[class_index].insert(len(digit_classes[class_index]), element)
+            i -= 1
+        print("iteration = ", digits_length,"\n")
         print(digit_classes)
+        sorted_array = []
+        for digit_class in digit_classes:
+            sorted_array = sorted_array + digit_class
+        return sorted_array
     def getSymbolIndex(self, symbol):
-        max_ascii_code = 122
-        min_ascii_code = 48
+        max_ascii_letter = 122
+        min_ascii_letter = 97
+        max_ascii_number = 57
+        min_ascii_number = 48
+        ascii_number_padding = max_ascii_number - min_ascii_number
 
         ascii_code = ord(symbol)
-        if((ascii_code < min_ascii_code) or (ascii_code > max_ascii_code)):
-            raise Exception("Only alphanumeric digits allowed", str(symbol))
-        return (ascii_code - min_ascii_code)
+        if(((ascii_code >= min_ascii_number) and (ascii_code <= max_ascii_number))):
+            return (ascii_code - min_ascii_number)
+        if(((ascii_code >= min_ascii_letter) and (ascii_code <= max_ascii_letter))):
+            return ((ascii_code - min_ascii_letter)+1) + ascii_number_padding
+        return -1
         
 class bilinked_list_node:
     def __init__(self, data):
@@ -158,16 +190,18 @@ class tree_node:
 sorting = SortingAlgorithms()
 array = [1,3,2,7,5,0]
 char_array = [
-    "ac",
-    "bb",
-    "ca"
+    "011",
+    "101",
+    "093",
+    "004",
+    "z31",
+    "z22",
+    "z13",
 ]
-# print(sorting.LocalInsertionSort(array))
+print(sorting.LocalInsertionSort(array))
 
-# print(sorting.TreeSort(array))
-sorting.RadixLSDSort(char_array, 2)
-
-
+print(sorting.TreeSort(array))
+print(sorting.RadixLSDSort(char_array, 2))
 # # Tree Sort testing
 # # Bilinked list testing
 # head = bilinked_list_node(1)
