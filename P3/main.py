@@ -67,7 +67,7 @@ class SortingAlgorithms:
     def RadixLSDSort(self, array, digits_length):
         
         digit_classes = []
-        digit_classes_number = 35
+        digit_classes_number = 15
         
         # Create digit_classes
         for i in range(digit_classes_number+1):
@@ -100,7 +100,7 @@ class SortingAlgorithms:
             sorted_array = sorted_array + digit_class
         return sorted_array
     def getSymbolIndex(self, symbol):
-        max_ascii_letter = 122
+        max_ascii_letter = 102
         min_ascii_letter = 97
         max_ascii_number = 57
         min_ascii_number = 48
@@ -111,7 +111,7 @@ class SortingAlgorithms:
             return (ascii_code - min_ascii_number)
         if(((ascii_code >= min_ascii_letter) and (ascii_code <= max_ascii_letter))):
             return ((ascii_code - min_ascii_letter)+1) + ascii_number_padding
-        return -1
+        raise Exception("Non hex digit = {}\n".format(symbol))
         
 class bilinked_list_node:
     def __init__(self, data):
@@ -189,13 +189,13 @@ class interface:
             "101",
             "093",
             "004",
-            "z31",
-            "z22",
-            "z13",
+            "f31",
+            "c22",
+            "b13",
         ]
         wordsize_string_array_to_sort = 2
         
-        if(len(sys.argv) == 3):
+        if(len(sys.argv) == 4):
             if(sys.argv[1] == "-f"):
                 print("File option")
                 try:
@@ -205,6 +205,7 @@ class interface:
                 file_lines = file.read().split("\n")
                 array_to_sort = file_lines[0].split(",")
                 string_array_to_sort = file_lines[1].split(",")
+                wordsize_string_array_to_sort = int(sys.argv[3])
 
                 try:
                     file.close()
