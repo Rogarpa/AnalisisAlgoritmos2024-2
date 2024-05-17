@@ -1,11 +1,9 @@
-import numpy as np
+import sys
+
 class SortingAlgorithms:
 
     def LocalInsertionSort(self, array):
-        print("====================")
-        print("====================")
-        print("====================")
-        print("LOCAL INSERTION SORT ALGORITHM")
+        
         if (not hasattr(array, '__len__')):
             raise Exception("Input has no array behaviour")
         if (len(array) <= 0):
@@ -13,7 +11,9 @@ class SortingAlgorithms:
         toInsertList = bilinked_list_node(array[0])
         lastInsertedNode = toInsertList
         for element in array[1:]:
-            
+            print("element insertion of {1} starting from {0} ".format(lastInsertedNode.data, element))
+            head = self.getHead(lastInsertedNode)
+            print(head.toArray(head))
             if(lastInsertedNode.data < element):
                 lastInsertedNode = self.insert_right(element, lastInsertedNode)
             else:
@@ -51,10 +51,7 @@ class SortingAlgorithms:
             return node.insert_after(data)
         return self.insert_right(data, right_node)
     def TreeSort(self, array):
-        print("====================")
-        print("====================")
-        print("====================")
-        print("TREE SORT ALGORITHM")
+        
         if (not hasattr(array, '__len__')):
             raise Exception("Input has no array behaviour")
         if (len(array) <= 0):
@@ -68,10 +65,7 @@ class SortingAlgorithms:
         return root.inorderTraversal(root)
 
     def RadixLSDSort(self, array, digits_length):
-        print("====================")
-        print("====================")
-        print("====================")
-        print("RADIX LSD SORT ALGORITHM")
+        
         digit_classes = []
         digit_classes_number = 35
         
@@ -186,26 +180,66 @@ class tree_node:
         res.append(root.data)
         res = res + self.inorderTraversal(root.right)
         return res
-    
-sorting = SortingAlgorithms()
-array = [1,3,2,7,5,0]
-char_array = [
-    "011",
-    "101",
-    "093",
-    "004",
-    "z31",
-    "z22",
-    "z13",
-]
-print(sorting.LocalInsertionSort(array))
 
-print(sorting.TreeSort(array))
-print(sorting.RadixLSDSort(char_array, 2))
-# # Tree Sort testing
-# # Bilinked list testing
-# head = bilinked_list_node(1)
-# first_node = head.insert_before(5)
-# head.insert_before(4)
-# head.insert_before(3)
-# print(first_node.toArray(first_node))
+class interface:
+    def start_menu(self):
+        array_to_sort = [1,3,2,7,5,0]
+        string_array_to_sort = [
+            "011",
+            "101",
+            "093",
+            "004",
+            "z31",
+            "z22",
+            "z13",
+        ]
+        wordsize_string_array_to_sort = 2
+        
+        if(len(sys.argv) == 3):
+            if(sys.argv[1] == "-f"):
+                print("File option")
+                try:
+                    file = open(sys.argv[2], "r")
+                except:
+                    print("Invalid filename")
+                file_lines = file.read().split("\n")
+                array_to_sort = file_lines[0].split(",")
+                string_array_to_sort = file_lines[1].split(",")
+
+                try:
+                    file.close()
+                except:
+                    print("Closing file failed")
+        elif(len(sys.argv) == 5):
+            print("Command line option")
+            if(sys.argv[1] == "-a"):
+                array_to_sort = sys.argv[2][1:len(sys.argv[2])-1].split(",")
+                string_array_to_sort = sys.argv[3][1:len(sys.argv[3])-1].split(",")
+                wordsize_string_array_to_sort = int(sys.argv[4])
+        print("INPUT\n")
+        print("array_to_sort", array_to_sort)
+        print("string_array_to_sort", string_array_to_sort)
+        print("wordsize_string_array_to_sort", wordsize_string_array_to_sort)
+
+        sorting = SortingAlgorithms()
+        print("====================")
+        print("====================")
+        print("====================")
+        print("LOCAL INSERTION SORT ALGORITHM")
+        print("unsorted array =", array_to_sort, "\n")
+        print("sorted array =", sorting.LocalInsertionSort(array_to_sort), "\n")
+        print("====================")
+        print("====================")
+        print("====================")
+        print("TREE SORT ALGORITHM")
+        print("unsorted array =", array_to_sort, "\n")
+        print("sorted array =", sorting.TreeSort(array_to_sort), "\n")
+        print("====================")
+        print("====================")
+        print("====================")
+        print("RADIX LSD SORT ALGORITHM")
+        print("unsorted array =", string_array_to_sort, "\n")
+        print("sorted array =", sorting.RadixLSDSort(string_array_to_sort, wordsize_string_array_to_sort), "\n")
+
+interface = interface()
+interface.start_menu()
