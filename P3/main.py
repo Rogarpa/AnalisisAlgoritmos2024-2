@@ -192,12 +192,13 @@ class interface:
             "f31",
             "c22",
             "b13",
+            "b12",
         ]
-        wordsize_string_array_to_sort = 2
+        wordsize_string_array_to_sort = 3
         
-        if(len(sys.argv) == 4):
+        if(len(sys.argv) == 3):
             if(sys.argv[1] == "-f"):
-                print("File option")
+                print("FILE OPTION")
                 try:
                     file = open(sys.argv[2], "r")
                 except:
@@ -205,19 +206,19 @@ class interface:
                 file_lines = file.read().split("\n")
                 array_to_sort = file_lines[0].split(",")
                 string_array_to_sort = file_lines[1].split(",")
-                wordsize_string_array_to_sort = int(sys.argv[3])
+                wordsize_string_array_to_sort = int(file_lines[2])
 
                 try:
                     file.close()
                 except:
                     print("Closing file failed")
         elif(len(sys.argv) == 5):
-            print("Command line option")
+            print("COMMAND LINE OPTION")
             if(sys.argv[1] == "-a"):
                 array_to_sort = sys.argv[2][1:len(sys.argv[2])-1].split(",")
                 string_array_to_sort = sys.argv[3][1:len(sys.argv[3])-1].split(",")
                 wordsize_string_array_to_sort = int(sys.argv[4])
-        print("INPUT\n")
+        print("INPUT\n", len(sys.argv))
         print("array_to_sort", array_to_sort)
         print("string_array_to_sort", string_array_to_sort)
         print("wordsize_string_array_to_sort", wordsize_string_array_to_sort)

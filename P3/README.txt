@@ -9,7 +9,7 @@ $python3 main.py -f input.txt
     Tercera linea longitud de los elementos para RadixLSD
 
 Para correr el programa introduciendo las secuencias a ordernar correr:
-$python3 main.py -a [1,2,3] ["011","101","093","004","f31","c22","b13"] 2
+$python3 main.py -a [1,2,3] ["011","101","093","004","f31","c22","b13","b12"] 3
     Nota: El primer arreglo es el arreglo que ordenara LocalInsertionSort y TreeSort
     El segundo arreglo es el arreglo que ordenara RadixLSD
     El tercer argumento es la longitud de los elementos para RadixLSD
